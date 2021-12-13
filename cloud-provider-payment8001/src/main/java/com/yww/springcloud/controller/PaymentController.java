@@ -6,7 +6,12 @@ import com.yww.springcloud.service.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -31,6 +36,12 @@ public class PaymentController {
     @Value("${server.port}")
     private String serverPort;
 
+    /**
+     * 引入服务发现
+     */
+    @Resource
+    private DiscoveryClient discoveryClient;
+
     @PostMapping("/save")
     public Result<Long> save(@RequestBody Payment payment) {
         long result = paymentService.save(payment);
@@ -50,6 +61,24 @@ public class PaymentController {
         } else {
             return new Result<>(500,"查询失败---" + serverPort);
         }
+    }
+
+    @GetMapping("/discovery")
+    public Result<DiscoveryClient> discovery() {
+        // 获取注册的微服务列表信息
+        List<String> services = discoveryClient.getServices();
+        for (String service : services) {
+            log.info("服务------" + service);
+        }
+        // 根据具体的微服务ID获取其中所有的实例
+        List<ServiceInstance> instances = discoveryClient.getInstances("CLOUD-PAYMENT-PROVIDER");
+        for (ServiceInstance instance : instances) {
+            log.info("服务ID-----" + instance.getServiceId());
+            log.info("主机名称-----" + instance.getHost());
+            log.info("实例端口号-----" + instance.getPort());
+            log.info("实例地址" + instance.getUri());
+        }
+        return new Result<>(200,"获取信息成功",this.discoveryClient);
     }
 
 }

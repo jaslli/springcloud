@@ -19,6 +19,11 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka
+  instance:
+    # 实例名称
+    instance-id: payment8002
+    # 访问路径显示IP地址
+    prefer-ip-address: true
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml

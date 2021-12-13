@@ -5,6 +5,11 @@ eureka:
   instance:
     # eureka服务端的实例名称
     hostname: eureka7001.com
+  server:
+    # 关闭自我保护机制,默认是开启的
+    enable-self-preservation: false
+    # 间隔时间
+    eviction-interval-timer-in-ms: 2000
   client:
     # false表示不向注册中心注册自己这个微服务
     register-with-eureka: false
