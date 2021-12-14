@@ -3,6 +3,7 @@ package com.yww.springcloud.controller;
 import com.yww.springcloud.entity.Payment;
 import com.yww.springcloud.entity.Result;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -35,6 +36,17 @@ public class OrderController {
     @GetMapping("/getById/{id}")
     public Result getById(@PathVariable("id") long id) {
         return restTemplate.getForObject(URL+"/payment/getById/" + id,Result.class);
+    }
+
+    @GetMapping("/getById2/{id}")
+    public Result getById2(@PathVariable("id") long id) {
+        ResponseEntity<Result> entity =
+                restTemplate.getForEntity(URL + "/payment/getById/" + id, Result.class);
+        if (entity.getStatusCode().is2xxSuccessful()) {
+            return entity.getBody();
+        } else {
+            return new Result<>(500, "操作失败");
+        }
     }
 
 }
