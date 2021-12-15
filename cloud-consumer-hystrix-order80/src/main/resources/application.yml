@@ -1,0 +1,21 @@
+server:
+  port: 80
+spring:
+  application:
+    name: feign-hystrix-payment-consumer
+
+eureka:
+  client:
+    register-with-eureka: false
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka
+feign:
+  client:
+    config:
+      default:
+        # 建立连接后从服务器读取到可用资源所用的时间
+        connectTimeout: 5000
+        # 建立连接建立所用时间
+        readTimeout: 5000
+  hystrix:
+    enabled: true
