@@ -21,7 +21,7 @@ import javax.annotation.Resource;
  **/
 @RestController
 @Slf4j
-@RequestMapping("payment")
+@RequestMapping("/payment")
 public class PaymentController {
 
     @Resource
@@ -39,6 +39,11 @@ public class PaymentController {
     @GetMapping("/timeout/{id}")
     public String infoTimeOut(@PathVariable("id")Integer id) {
         return service.paymentInfoTimeOut(id);
+    }
+
+    @GetMapping("/circuit/{id}")
+    public String circuit(@PathVariable("id")Integer id) {
+        return service.paymentCircuitBreaker(id);
     }
 
 }
